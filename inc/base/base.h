@@ -75,13 +75,6 @@ struct esModuleInfo {
 extern PORT_C_UNUSED const PORT_C_ROM struct esModuleInfo GlobalUnnamedModule;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
-
-void esBaseInit(
-    void);
-
-void esBaseTerm(
-    void);
-
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
 }

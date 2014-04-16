@@ -72,7 +72,7 @@ struct esModuleInfo {
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
-extern PORT_C_UNUSED const PORT_C_ROM struct esModuleInfo GlobalUnnamedModule;
+extern PORT_C_UNUSED const PORT_C_ROM struct esModuleInfo esGlobalUnnamedModule;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 /*--------------------------------------------------------  C++ extern end  --*/

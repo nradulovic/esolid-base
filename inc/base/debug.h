@@ -111,7 +111,7 @@
     do {                                                                        \
         if (!(expr)) {                                                          \
             static const PORT_C_ROM struct debugCobject_ thisObject = {         \
-                &GlobalUnnamedModule,                                           \
+                &esGlobalUnnamedModule,                                         \
                 PORT_C_FUNC,                                                    \
                 PORT_C_LINE                                                     \
             };                                                                  \

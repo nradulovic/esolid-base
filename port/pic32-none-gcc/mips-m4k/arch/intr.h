@@ -51,9 +51,9 @@
  * @name        Interrupt management
  * @{ *//*--------------------------------------------------------------------*/
 
-#define ES_INTR_ENABLE()                portIntrEnable_()
+#define ES_INTR_ENABLE()                portIntrEnable()
 
-#define ES_INTR_DISABLE()               portIntrDisable_()
+#define ES_INTR_DISABLE()               portIntrDisable()
 
 #define ES_INTR_MASK_SET(mask)          portIntrMaskSet_(mask)
 
@@ -107,24 +107,18 @@ typedef unsigned int esIntrCtx;
  * @name        Generic port functions
  * @{ *//*--------------------------------------------------------------------*/
 
-static PORT_C_INLINE_ALWAYS void __attribute__((nomips16)) portIntrEnable_(
-    void) {
-    __asm __volatile__(
-        "   ei                                              \n");
-}
+void __attribute__((nomips16)) portIntrEnable(
+    void);
 
-static PORT_C_INLINE_ALWAYS void __attribute__((nomips16)) portIntrDisable_(
-    void) {
-    __asm __volatile__(
-        "   di                                              \n");
-}
+void __attribute__((nomips16)) portIntrDisable(
+    void);
 
 /* NOTE: This is some very bad design right here. You must apply R-M-W operation
  *       on a register to set up new ISR priority level. The R-M-W operation is
  *       not atomic so there is a possibility to scramble status register in
  *       some cases.
  */
-static PORT_C_INLINE_ALWAYS void portIntrMaskSet_(
+static PORT_C_INLINE_ALWAYS void __attribute__((nomips16)) portIntrMaskSet_(
     esIntrCtx           intrCtx) {
     esIntrCtx           statusReg;
 
@@ -145,7 +139,7 @@ static PORT_C_INLINE_ALWAYS void portIntrMaskSet_(
 #endif
 }
 
-static PORT_C_INLINE_ALWAYS void portIntrMaskGet_(
+static PORT_C_INLINE_ALWAYS void __attribute__((nomips16)) portIntrMaskGet_(
     esIntrCtx *         intrCtx) {
 
 #if (CONFIG_INTR_MAX_ISR_PRIO == 0)

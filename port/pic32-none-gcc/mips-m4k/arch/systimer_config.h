@@ -52,7 +52,7 @@
  *              @ref CONFIG_SYSTIMER_CLOCK_FREQ is properly set.
  */
 #if !defined(CONFIG_SYSTIMER_EVENT_FREQ)
-# define CONFIG_SYSTIMER_EVENT_FREQ     100ul
+# define CONFIG_SYSTIMER_EVENT_FREQ     1000ul
 #endif
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

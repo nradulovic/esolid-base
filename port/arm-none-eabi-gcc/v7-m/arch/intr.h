@@ -189,13 +189,13 @@ static PORT_C_INLINE_ALWAYS void portIntrMaskReplace_(
     __asm __volatile__ (
         "   mrs     %0, basepri                             \n"
         "   msr     basepri, %1                             \n"
-        : "=r"(tmp)
+        : "=&r"(tmp)
         : "r"(new));
 #else
     __asm __volatile__ (
         "   mrs     %0, primask                             \n"
         "   msr    primask, %1                              \n"
-        : "=r"(tmp)
+        : "=&r"(tmp)
         : "r"(new));
 #endif
     *old = tmp;

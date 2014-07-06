@@ -227,7 +227,7 @@
  *              satisfied
  * @api
  */
-#if (1 == CONFIG_API_VALIDATION)
+#if (1 == CONFIG_DEBUG)
 # define ES_ENSURE(expr)                                                    \
     do {                                                                        \
         if ((expr) != ES_ERROR_NONE) {                                          \

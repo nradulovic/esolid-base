@@ -186,6 +186,11 @@ static PORT_C_INLINE bool esSlsIsEmpty(
     }
 }
 
+static PORT_C_INLINE esSls * esSlsGetHead(const esSls * sentinel) {
+
+    return (sentinel->next);
+}
+
 /** @} *//*---------------------------------------------------------------*//**
  * @name        Doubly Linked list with Sentinel
  * @{ *//*--------------------------------------------------------------------*/

@@ -21,11 +21,10 @@
  *//***********************************************************************//**
  * @file
  * @author  	Nenad Radulovic
- * @brief   	Profile for Microchip PIC32MX150F128
+ * @brief   	Profile for Microchip PIC32MX250F128
  * @addtogroup  pic32-none-gcc
- * @brief       Profile for Microchip PIC32MX150F128
  *********************************************************************//** @{ */
-/**@defgroup    pic32-none-gcc-pic32mx150f128 Microchip PIC32MX150F128
+/**@defgroup    pic32-none-gcc-pic32mx250f128 Microchip PIC32MX250F128
  * @brief       Profile for Microchip PIC32MX150F128
  * @{ *//*--------------------------------------------------------------------*/
 

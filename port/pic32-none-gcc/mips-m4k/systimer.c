@@ -52,21 +52,18 @@ static void (* GlobalSysTimerHandler[4])(void);
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
 void portModuleSysTimerInit(
-    void) {
-
-    ES_SYSTIMER_DISABLE();
-    IFS0CLR = IFS0_CT_BIT;
-    IEC0CLR = IEC0_CT_BIT;
-    IPC0CLR = 0x7u << IPC0_CTIP_SHIFT;
-    IPC0SET = (ES_INTR_DEFAULT_ISR_PRIO << IPC0_CTIP_SHIFT) & IPC0_MASK;
+    void)
+{
+    T1CON = 0;
+    T1CONbits.TCKPS = 3;
+    IPC1bits.T1IP = CONFIG_INTR_MAX_ISR_PRIO;
 }
 
 void portModuleSysTimerTerm(
-    void) {
-
+    void)
+{
+    ES_SYSTIMER_ISR_DISABLE();
     ES_SYSTIMER_DISABLE();
-    IFS0CLR = IFS0_CT_BIT;
-    IEC0CLR = IEC0_CT_BIT;
 }
 
 void portSysTimerSetHandler(
@@ -78,24 +75,18 @@ void portSysTimerSetHandler(
     GlobalSysTimerHandler[level] = handler;
 }
 
-void __ISR(_CORE_TIMER_VECTOR) sysTimerHandler(
-    void) {
-
-    uint_fast8_t        count;
-    esCpuReg            compare;
-
-    ES_SYSTIMER_DISABLE();
-    compare = _CP0_GET_COMPARE();
-    _CP0_SET_COUNT(0u);
-    _CP0_SET_COMPARE(compare);
-    ES_SYSTIMER_ENABLE();
+void __ISR(_TIMER_1_VECTOR) sysTimerHandler(
+    void)
+{
+    unsigned int count;
+    
+    IFS0bits.T1IF = 0;
 
     for (count = 0; count < ES_ARRAY_DIMENSION(GlobalSysTimerHandler); count++) {
         if (GlobalSysTimerHandler[count] != NULL) {
             GlobalSysTimerHandler[count]();
         }
     }
-    IFS0CLR = IFS0_CT_BIT;
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

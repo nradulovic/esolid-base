@@ -49,7 +49,7 @@
 /**@brief       System timer one tick value
  */
 #define ES_SYSTIMER_ONE_TICK                                                    \
-    (CONFIG_SYSTIMER_CLOCK_FREQ / CONFIG_SYSTIMER_EVENT_FREQ)
+    (CONFIG_SYSTIMER_CLOCK_FREQ / (CONFIG_SYSTIMER_EVENT_FREQ * 256))
 
 /**@brief       Maximum number of ticks without overflowing the system timer
  */
@@ -100,82 +100,66 @@ typedef unsigned int esSysTimerTick;
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
 static PORT_C_INLINE void portSysTimerInit_(
-    esSysTimerTick      tick) {
-
-    esCpuReg            cause;
-
-    cause  = _CP0_GET_CAUSE();
-    _CP0_SET_CAUSE(cause | _CP0_CAUSE_DC_MASK);
-    _CP0_SET_COUNT(0u);
-    _CP0_SET_COMPARE(tick);
-    _CP0_SET_CAUSE(cause & ~_CP0_CAUSE_DC_MASK);
+    esSysTimerTick      tick)
+{
+    T1CONbits.ON = 0;
+    PR1          = tick;
+    TMR1         = 0;
+    T1CONbits.ON = 1;
 }
 
 static PORT_C_INLINE void portSysTimerTerm_(
-    void) {
-
-    esCpuReg            cause;
-
-    cause  = _CP0_GET_CAUSE();
-    _CP0_SET_CAUSE(cause | _CP0_CAUSE_DC_MASK);
+    void)
+{
+    IEC0bits.T1IE = 0;
+    T1CONbits.ON = 0;
 }
 
 static PORT_C_INLINE esSysTimerTick portSysTimerGetRVal_(
-    void) {
-
-    return (_CP0_GET_COMPARE());
+    void)
+{
+    return (PR1);
 }
 
 static PORT_C_INLINE esSysTimerTick portSysTimerGetCVal_(
-    void) {
-
-    return (_CP0_GET_COMPARE() - _CP0_GET_COUNT());
+    void)
+{
+    return (TMR1);
 }
 
 static PORT_C_INLINE void portSysTimerReload_(
-    esSysTimerTick      tick) {
-
-    esCpuReg            cause;
-
-    cause  = _CP0_GET_CAUSE();
-    _CP0_SET_CAUSE(cause | _CP0_CAUSE_DC_MASK);
-    _CP0_SET_COUNT(0u);
-    _CP0_SET_COMPARE(tick);
-    _CP0_SET_CAUSE(cause & ~_CP0_CAUSE_DC_MASK);
+    esSysTimerTick      tick)
+{
+    T1CONbits.ON = 0;
+    PR1          = tick;
+    TMR1         = 0;
+    T1CONbits.ON = 1;
 }
 
 static PORT_C_INLINE void portSysTimerEnable_(
-    void) {
-
-    esCpuReg            cause;
-
-    cause  = _CP0_GET_CAUSE();
-    cause &= ~_CP0_CAUSE_DC_MASK;
-    _CP0_SET_CAUSE(cause);
+    void)
+{
+    T1CONbits.ON = 1;
 }
 
 
 static PORT_C_INLINE void portSysTimerDisable_(
-    void) {
-
-    esCpuReg            cause;
-
-    cause  = _CP0_GET_CAUSE();
-    cause |= _CP0_CAUSE_DC_MASK;
-    _CP0_SET_CAUSE(cause);
+    void)
+{
+    T1CONbits.ON = 0;
 }
 
 static PORT_C_INLINE void portSysTimerIsrEnable_(
-    void) {
-
-    IFS0CLR = _IFS0_CTIF_MASK;
-    IEC0SET = _IEC0_CTIE_MASK;
+    void)
+{
+    IFS0bits.T1IF = 0;
+    IEC0bits.T1IE = 1;
 }
 
 static PORT_C_INLINE void portSysTimerIsrDisable_(
-    void) {
-
-    IEC0CLR = _IEC0_CTIE_MASK;
+    void)
+{
+    IEC0bits.T1IE = 0;
 }
 
 void portModuleSysTimerInit(

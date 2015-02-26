@@ -31,6 +31,7 @@
 /*=========================================================  INCLUDE FILES  ==*/
 
 #include <xc.h>
+#include <stddef.h>
 
 #include "arch/systimer.h"
 #include "arch/intr.h"

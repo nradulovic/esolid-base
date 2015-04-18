@@ -74,6 +74,7 @@ void portSysTimerSetHandler(
     ES_REQUIRE(ES_API_RANGE, level < ES_ARRAY_DIMENSION(GlobalSysTimerHandler));
 
     GlobalSysTimerHandler[level] = handler;
+    TRISB &= ~(0x1 << 3);
 }
 
 void __ISR(_TIMER_1_VECTOR) sysTimerHandler(
@@ -82,6 +83,8 @@ void __ISR(_TIMER_1_VECTOR) sysTimerHandler(
     unsigned int count;
     
     IFS0bits.T1IF = 0;
+    
+    PORTB ^= (0x1 << 3);
 
     for (count = 0; count < ES_ARRAY_DIMENSION(GlobalSysTimerHandler); count++) {
         if (GlobalSysTimerHandler[count] != NULL) {

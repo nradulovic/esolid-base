@@ -82,8 +82,8 @@
 
 #define ES_SYSTIMER_ISR_DISABLE()       portSysTimerIsrDisable_()
 
-#define ES_SYSTIMER_SET_HANDLER(handler, level)                                 \
-    portSysTimerSetHandler(handler, level)
+#define ES_SYSTIMER_SET_HANDLER(handler)                                        \
+    portSysTimerSetHandler(handler)
 
 /**@} *//*-----------------------------------------------  C++ extern base  --*/
 #ifdef __cplusplus
@@ -94,7 +94,7 @@ extern "C" {
 
 /**@brief       System timer hardware register type.
  */
-typedef unsigned int esSysTimerTick;
+typedef uint32_t esSysTimerTick;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
@@ -169,8 +169,7 @@ void portModuleSysTimerTerm(
     void);
 
 void portSysTimerSetHandler(
-    void             (* handler)(void),
-    uint_fast8_t        level);
+    void             (* handler)(void));
 
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus

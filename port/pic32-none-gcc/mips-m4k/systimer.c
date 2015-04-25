@@ -45,7 +45,7 @@
 
 static const ES_MODULE_INFO_CREATE("systimer", "System Timer (port)", "Nenad Radulovic");
 
-static void (* GlobalSysTimerHandler[4])(void);
+static void (* GlobalSysTimerHandler)(void);
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -68,29 +68,19 @@ void portModuleSysTimerTerm(
 }
 
 void portSysTimerSetHandler(
-    void             (* handler)(void),
-    uint_fast8_t        level) {
+    void             (* handler)(void)) {
 
     ES_REQUIRE(ES_API_RANGE, level < ES_ARRAY_DIMENSION(GlobalSysTimerHandler));
 
-    GlobalSysTimerHandler[level] = handler;
-    TRISB &= ~(0x1 << 3);
+    GlobalSysTimerHandler = handler;
 }
 
 void __ISR(_TIMER_1_VECTOR) sysTimerHandler(
     void)
 {
-    unsigned int count;
-    
     IFS0bits.T1IF = 0;
     
-    PORTB ^= (0x1 << 3);
-
-    for (count = 0; count < ES_ARRAY_DIMENSION(GlobalSysTimerHandler); count++) {
-        if (GlobalSysTimerHandler[count] != NULL) {
-            GlobalSysTimerHandler[count]();
-        }
-    }
+    GlobalSysTimerHandler();
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
